@@ -52,11 +52,11 @@ class rnd():
         _path = get_path()
         self._pathOut = _path + 'artifact/'
         self._pathTemplate = _path + 'template/'
-        # размечаем дирректории если их нет
+        # размечаем окружение
         if not exists(self._pathOut):
             mkdir(self._pathOut)
         if not exists(self._pathTemplate):
-            mkdir(self._pathOut)
+            mkdir(self._pathTemplate)
         self._template = self.set_template(name_tempalate)
 
     def set_template(self, name_tempalate):
