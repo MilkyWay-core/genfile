@@ -1,4 +1,4 @@
-
+﻿
 from os import system
 from source.rnd import rnd
 
@@ -24,7 +24,7 @@ for num in range(101, 105):
             'db_pass': 'chikibrikiblayt'
         }
     s_num = str(num)
-    #1. Создаём экзепляр класс rnd, с указанием имени шаблона
+    #1. Создаём экземпляр класс rnd, с указанием имени шаблона
     caster = rnd('exampl_1.yaml')
     #2.Заполняем справочник с переменными из шаблона
     dict_variable_template['node_num'] = s_num
@@ -38,7 +38,7 @@ for num in range(101, 105):
 #exampl 2
 #Заполняем один файл множеством строк 
 
-#1. Создаём экзепляр класс rnd, с указанием имени шаблона
+#1. Создаём экземпляр класс rnd, с указанием имени шаблона
 caster = rnd('exampl_2.txt')
 #2.Заполняем справочник с переменными из шаблона
 dict_variable_template = {'site': 'site', 'admin_panel': 'admin.site'}
@@ -46,4 +46,5 @@ dict_variable_template = {'site': 'site', 'admin_panel': 'admin.site'}
 caster.set_variable(dict_variable_template)
 #4.Генерируем файл
 caster.cast_file('dns_config.txt')
+
 
