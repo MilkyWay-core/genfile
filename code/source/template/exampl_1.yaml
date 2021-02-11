@@ -1,0 +1,9 @@
+service:
+    hostname: exampl{{node_num}}
+auth:
+    db:
+        server: {{db_hostname}}:{{db_port}}
+        name: db_{{node_num}}
+        user: {{db_user}}
+        password: {{db_pass}}
+
