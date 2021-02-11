@@ -1,17 +1,18 @@
-from jinja2 import Template, BaseLoader, TemplateNotFound, Environment
-from io import IOBase, FileIO
-from os import system, walk
+from jinja2 import BaseLoader, TemplateNotFound, Environment
+from os import walk, mkdir
 from os.path import join, exists, getmtime
 from inspect import getsourcefile
 from os.path import abspath
 from sys import platform
 
+
 class rndException(Exception):
     pass
 
+
 def get_path():
     """
-    возвращает путь к файлу
+    возвращает путь к дирректории с этим файлом
     """
     if platform == "win32":
         separator = '\\'
@@ -22,6 +23,7 @@ def get_path():
     del array_file[-1]
     path = separator.join(array_file)
     return path + separator
+
 
 class _loader(BaseLoader):
     """
@@ -50,6 +52,11 @@ class rnd():
         _path = get_path()
         self._pathOut = _path + 'artifact/'
         self._pathTemplate = _path + 'template/'
+        # размечаем дирректории если их нет
+        if not exists(self._pathOut):
+            mkdir(self._pathOut)
+        if not exists(self._pathTemplate):
+            mkdir(self._pathOut)
         self._template = self.set_template(name_tempalate)
 
     def set_template(self, name_tempalate):
@@ -86,4 +93,3 @@ class rnd():
         """
         with open(self._pathOut+f_name_result, 'w+') as new_file:
             new_file.write(self._go_render())
-
