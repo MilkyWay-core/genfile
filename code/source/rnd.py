@@ -1,28 +1,11 @@
 from jinja2 import BaseLoader, TemplateNotFound, Environment
 from os import walk, mkdir
 from os.path import join, exists, getmtime
-from inspect import getsourcefile
-from os.path import abspath
-from sys import platform
+from .assist import get_path, load_file
 
 
 class rndException(Exception):
     pass
-
-
-def get_path():
-    """
-    возвращает путь к дирректории с этим файлом
-    """
-    if platform == "win32":
-        separator = '\\'
-    else:
-        separator = '/'
-    this_file = abspath(getsourcefile(lambda: None))
-    array_file = this_file.split(separator)
-    del array_file[-1]
-    path = separator.join(array_file)
-    return path + separator
 
 
 class _loader(BaseLoader):
@@ -35,11 +18,8 @@ class _loader(BaseLoader):
 
     def get_source(self, environment, template):
         path = join(self.path, template)
-        if not exists(path):
-            raise TemplateNotFound(template)
+        source = load_file(path)
         mtime = getmtime(path)
-        with open(path) as f:
-            source = f.read()
         return source, path, lambda: mtime == getmtime(path)
 
 

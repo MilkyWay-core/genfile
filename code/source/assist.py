@@ -1,6 +1,7 @@
 from sys import platform
-from os.path import abspath
+from os.path import abspath, exists
 from inspect import getsourcefile
+
 
 def get_path():
     """
@@ -15,3 +16,14 @@ def get_path():
     del array_file[-1]
     path = separator.join(array_file)
     return path + separator
+
+def load_file(path_file):
+    """
+    осуществляет поиск файла и загрузку в память
+    """
+    
+    if exists(path_file):
+        with open(path_file) as f:
+            return f.read()
+
+
