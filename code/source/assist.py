@@ -5,7 +5,7 @@ from inspect import getsourcefile
 
 def get_path():
     """
-    возвращает путь к дирректории с этим файлом
+    возвращает путь к дирректории с файлом из которого была запущена функция
     """
     if platform == "win32":
         separator = '\\'
@@ -17,13 +17,10 @@ def get_path():
     path = separator.join(array_file)
     return path + separator
 
+
 def load_file(path_file):
     """
     осуществляет поиск файла и загрузку в память
     """
-    
-    if exists(path_file):
-        with open(path_file) as f:
-            return f.read()
-
-
+    with open(path_file) as f:
+        return f.read()

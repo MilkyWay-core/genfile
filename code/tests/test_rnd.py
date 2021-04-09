@@ -1,4 +1,4 @@
-from os import remove, system,  walk
+from os import remove, system,  walk, path
 from io import IOBase, FileIO
 import unittest
 
@@ -15,18 +15,19 @@ class baseTest(unittest.TestCase):
             file.write('Hello {{world}}')
             file.close()
         self.testrnd = rnd(self.file_template_name)
-        self.testrnd.set_variable({'world': 'Neryungri'})
+        self.vars = self.testrnd.cast_variable({'world': 'Neryungri'})
+        self.template = self.testrnd.cast_template(self.file_template_name)
         self.file_result_name = 'test.result'
 
     def tearDown(self):
         remove(self.result_path)
         files = next(walk(self.testrnd._pathOut))
         if self.file_result_name in files[2]:
-            remove(self.testrnd._pathOut+self.file_result_name)
+            remove(path.join(self.testrnd._pathOut, self.file_result_name))
 
     def test_render_file(self):
         try:
-            self.testrnd.cast_file(self.file_result_name)
+            self.testrnd.cast_file(self.file_result_name, self.vars, self.template)
             files = next(walk(self.testrnd._pathOut))
             if self.file_result_name in files[2]:
                 self.assertTrue('OK')
@@ -39,7 +40,7 @@ class baseTest(unittest.TestCase):
 
     def test_render(self):
         try:
-            result_test = self.testrnd._go_render()
+            result_test = self.testrnd._go_render(self.vars, self.template)
             if result_test == 'Hello Neryungri':
                 self.assertTrue('OK')
             else:

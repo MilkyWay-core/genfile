@@ -1,5 +1,0 @@
- {% for i in range(1, 21) %}
-      # example{{i}}
-      - {{site}}{{i}}                CNAME   name.example.ru.
-      - {{admin_panel}}{{i}}         CNAME   {{site}}{{i}}.example.ru.
-{% endfor %}  
