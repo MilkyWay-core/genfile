@@ -21,7 +21,7 @@ class env:
                 nd = _normalized_data()
                 nd.result_file = result['$main$']['$result_file$']
                 nd.add_normalize_range(range_key)
-                nd.data = range_value
+                nd.add_normalize_data(range_value)
                 self._n_env.append(nd)
         except KeyError as err:
             raise envException(
@@ -62,7 +62,11 @@ class _normalized_data():
             else:
                 raise envException('Допущена ошибка в диапазоне $range$')
 
-
+    def add_normalize_data(self, data_dict: dict):
+        if type(data_dict) is dict:
+            self.data = data_dict
+        else:
+            raise envException('$range$ должен иметь формат $range$: n..n+1: some_key: some_value')
 '''
 пусть лежит, рекурсия ещё пригодится для реализации чтения в других форматах
     def _perefix_recurs(self, source, result):
