@@ -59,7 +59,7 @@ class cli:
                 self._result_dict['env_stream'] = load_file(self._args.e)
             except FileNotFoundError as err:
                 print(err)
-            self._result_dict['env_stream'] = self._args.e
+                self._result_dict['env_stream'] = self._args.e
     def _normalize_path(self, value: Path):
         '''
         Проверяем путь до файла и возвращаем отдельно имя файла и путь
