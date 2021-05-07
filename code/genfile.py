@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from source.cli import cli
 from source.env import env
 from source.rnd import rnd
