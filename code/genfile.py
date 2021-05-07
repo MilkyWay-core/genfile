@@ -1,6 +1,7 @@
 from source.cli import cli
 from source.env import env
 from source.rnd import rnd
+from os import path
 from ast import literal_eval
 """
 Точка входа программы
@@ -12,19 +13,19 @@ def main():
     # читает агрументы командной строки
     args_cli = cli()
     # получает аргумент e, если это файл читает и возвращает содержимое
-    env_data_list = (env(args_cli.get_arg('e'))).get_data()
+    env_data_list = (env(args_cli.get_arg('env_stream'))).get_data()
     for env_data in env_data_list:
         # получает аргумент template
-        name_template = (args_cli.get_arg('template').name).split('/')
+        file_template = args_cli.get_arg('file_template')
         # загружает шаблон
-        caster = rnd(args_cli.get_arg('r'))
+        caster = rnd(args_cli.get_arg('dir_result'), args_cli.get_arg('dir_template'))
         # заполняет шаблон аргументами, генерирует файл с результатом
         for beetwen in env_data.range_list:
             for i in range(beetwen[0], beetwen[1]):
                 env_data.data['i'] = i
                 result_data, result_file = normalize_data(env_data, i)
                 vars = caster.cast_variable(result_data)
-                template = caster.cast_template(name_template[-1])
+                template = caster.cast_template(args_cli.get_arg('file_template'))
                 caster.cast_file(result_file, vars, template)
                 print(f'{result_file}:done')
     print('END')

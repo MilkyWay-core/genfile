@@ -28,16 +28,22 @@ class rnd():
     Класс генерирует файлы по шаблону
     """
 
-    def __init__(self, path_result):
+    def __init__(self, path_result, dir_tamplate = ''):
         _path = get_path()
 
         # размечаем окружение
         if not exists(path_result):
             mkdir(path_result)
         self._pathOut = path_result
-        self._pathTemplate = join(_path, 'template')
-        if not exists(self._pathTemplate):
-            mkdir(self._pathTemplate)
+        default_dir = join(_path, 'template')
+        if not dir_tamplate or dir_tamplate == default_dir:
+            self._pathTemplate = default_dir
+            if not exists(self._pathTemplate):
+                mkdir(self._pathTemplate)
+        elif exists(dir_tamplate):
+            self._pathTemplate = dir_tamplate
+        else:
+            raise rndException(f'Папка с шаблонами {dir_tamplate} не найдена')
         loader_template = _loader(self._pathTemplate)
         self._environment = Environment(loader=loader_template)
 
