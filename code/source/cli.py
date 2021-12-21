@@ -26,7 +26,7 @@ class cli:
                                 metavar='env',
                                 type=str,
                                 nargs='?',
-                                help='env from the template (path to yaml file or even on the cli) [default ./templatefile.env]',
+                                help='env from the template (path to yaml file or even on the cli) [default ./templatefile.env], if not exist do not use file env',
                                 default='')
         self._result_dict = {}
         self._args = arg_parser.parse_args()
@@ -47,13 +47,14 @@ class cli:
         # обработка аргумента -е
         # если аргумент пустой выполняем поиск по имени файла + расширение (.env)
         # если нет, предпологаем что указан путь до файла, пытаемся прочитать
-        # если не читается предпологаем что данные переданы в формате командной строки по этому передаём управление дальше
+        # если не читается предпологаем что данные переданы в формате командной строки 
+        # если нет, предполагаем что пользователь не хочет использовать переменные в шаблоне передаём управление дальше
         if not self._args.e:
             try:
                 self._result_dict['env_stream'] = load_file(join(self._result_dict['dir_template'], self._result_dict['file_template']+'.env'))
             except FileNotFoundError as err:
                 print(err)
-                raise
+                print('-- шаблон будет обработан без переменных --')
         else:
             try:
                 self._result_dict['env_stream'] = load_file(self._args.e)
@@ -74,11 +75,12 @@ class cli:
             raise
 
 
-
-
-    
     def get_arg(self, name_arg):
         """
         получить значение параметра по имени
         """
-        return self._result_dict[name_arg]
+        try:
+            return self._result_dict[name_arg]
+        except KeyError:
+            if name_arg == 'env_stream':
+                return ''

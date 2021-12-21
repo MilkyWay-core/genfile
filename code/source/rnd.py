@@ -78,7 +78,7 @@ class rnd():
         """
         return template.render(vars)
 
-    def cast_file(self, f_name_result, vars, template):
+    def cast_file( self, f_name_result, template, vars=''):
         """
         записать результат на диск
         """

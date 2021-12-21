@@ -27,7 +27,7 @@ class baseTest(unittest.TestCase):
 
     def test_render_file(self):
         try:
-            self.testrnd.cast_file(self.file_result_name, self.vars, self.template)
+            self.testrnd.cast_file(f_name_result=self.file_result_name,vars=self.vars,template=self.template)
             files = next(walk(self.testrnd._pathOut))
             if self.file_result_name in files[2]:
                 self.assertTrue('OK')
@@ -36,6 +36,19 @@ class baseTest(unittest.TestCase):
                 self.assertFalse(error_mess)
         except Exception as err:
             error_mess = f'test_render_file tro-lo-lo ERROR: {err}'
+            self.assertFalse(error_mess)
+
+    def test_render_file_no_env(self):
+        try:
+            self.testrnd.cast_file(f_name_result=self.file_result_name,template=self.template)
+            files = next(walk(self.testrnd._pathOut))
+            if self.file_result_name in files[2]:
+                self.assertTrue('OK')
+            else:
+                error_mess = f'test_render_file_no_env tro-lo-lo: not find result file {self.file_result_name}'
+                self.assertFalse(error_mess)
+        except Exception as err:
+            error_mess = f'test_render_file_no_env tro-lo-lo ERROR: {err}'
             self.assertFalse(error_mess)
 
     def test_render(self):
