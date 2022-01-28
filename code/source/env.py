@@ -16,11 +16,13 @@ class env:
         result = yaml.load(loaded_yaml, Loader=yaml.SafeLoader)
         try:
             self._n_env = []
+            default_data = result['$main$']['$default$']
             ranges = result['$main$']['$range$']
             for range_key, range_value in ranges.items():
                 nd = _normalized_data()
                 nd.result_file = result['$main$']['$result_file$']
                 nd.add_normalize_range(range_key)
+                nd.add_normalize_data(default_data)
                 nd.add_normalize_data(range_value)
                 self._n_env.append(nd)
         except KeyError as err:
@@ -64,7 +66,10 @@ class _normalized_data():
 
     def add_normalize_data(self, data_dict: dict):
         if type(data_dict) is dict:
-            self.data = data_dict
+            if self.data:
+                self.data = {**self.data, **data_dict}
+            else:
+                self.data = data_dict
         else:
             raise envException('$range$ должен иметь формат $range$: n..n+1: some_key: some_value')
 '''
