@@ -14,25 +14,30 @@ genfile.py [-h] [-r [result]] [-e [env]] template
 
 **-r**  директория для сохранения сгенерированных файлов. Если не указывать сохранит в директорию artifacts
 
-**-e**  переменные для шаблона. Можно передавать файл в формате YAML или в командной строке. Если аргумент не указан, тогда программа будет искать в директории templates/ файл формата name_template.env. Если файл не будет найден тогда файл будет создан из шаблона без переменных 
-Формат для передачи через cli описан ниже.
+**-e**  переменные для шаблона. Можно передавать файл в формате YAML или как параметры командной строки в формате json. Если аргумент не указан, тогда программа будет искать в директории templates/ файл формата name_template.env. Если файл не будет найден тогда файл будет создан из шаблона без переменных 
 
 **template**  путь до файла шаблона, либо имя шаблона расположенного в папке templates.
 
 ## ПРИМЕРЫ:
 
-Пусть файл шаблона расположен в директории source/template/example_1.template, переменные для шаблона source/template/example_1.template.env, относительно genfile.py
+Пусть файл шаблона расположен в директории **source/template/example_1.template**, переменные для шаблона **source/template/example_1.template.env**, относительно **genfile.py**
 
 ```
 python genfile.py example_2.txt
 ```
-Найдёт example_2.txt в директории source/template/, найдёт файл с переменными example_1.template.env в той же директории и сгенерирует файлы в директорию по умолчанию artifacts
+Найдёт **example_2.txt** в директории **source/template/**, найдёт файл с переменными **example_1.template.env** в той же директории и сгенерирует файлы в директорию по умолчанию **artifacts**
 
 ```
-python genfile.py -esource/template/universal_env example_2.txt
+python genfile.py -e source/template/universal_env example_2.txt
 ```
 
-Найдёт example_2.txt в директории source/template/, найдёт файл с переменными source/template/universal_env и сгенерирует файлы в директорию по умолчанию artifacts
+Найдёт **example_2.txt** в директории **source/template/**, найдёт файл с переменными **source/template/universal_env** и сгенерирует файлы в директорию по умолчанию **artifacts**
+
+```
+python genfile.py -e source/template/universal_env -r /tmp/test/ /tmp/example_2.txt 
+```
+
+Найдет файл с переменными по пути **source/template/universal_env**, найдет шаблон по пути **/tmp/example_2.txt** и сгенерирует фалы а дирректорию **/tmp/test/**
 
 ```
 python genfile.py "-e{\$main\$:{\$result_file\$: example_2.txt, \$range\$: {1: {site: www.example, admin_panel: admin.example}}}}" -r/home/milkyway/tmp /home/milkyway/Templates/example_2.txt
