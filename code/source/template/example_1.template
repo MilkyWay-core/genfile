@@ -7,12 +7,12 @@ auth:
         hostname: {{db.master.hostname}}
         user: {{db.master.user}}
         password: {{db.master.password}}
-      {% if db.slave %}
+      {%- if db.slave %}
       mysql-slave:
         name: {{db.slave.name}}
         hostname: {{db.slave.hostname}}
         user: {{db.slave.user}}
         password: {{db.slave.password}}
-      {% endif %}
+      {%- endif %}
     ingress:
       hostname: {{ingress.hostname}}
