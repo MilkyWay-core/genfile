@@ -1,3 +1,4 @@
+from email.policy import default
 import yaml
 
 key_words = ['$main$', '$result_file$', '$range$', ]
@@ -16,18 +17,25 @@ class env:
         result = yaml.load(loaded_yaml, Loader=yaml.SafeLoader)
         try:
             self._n_env = []
-            default_data = result['$main$']['$default$']
-            ranges = result['$main$']['$range$']
-            for range_key, range_value in ranges.items():
-                nd = _normalized_data()
-                nd.result_file = result['$main$']['$result_file$']
-                nd.add_normalize_range(range_key)
-                nd.add_normalize_data(default_data)
-                nd.add_normalize_data(range_value)
-                self._n_env.append(nd)
+            main = result['$main$']
+            default_data = main.get('$default$')
+            ranges = main.get('$range$')
+            if ranges and default_data:
+                for range_key, range_value in ranges.items():
+                    nd = _normalized_data(range_value.get('$result_file$') or default_data.get('$result_file$')  or 'noname', range_key, default_data)
+                    nd.add_normalize_data(range_value)
+                    self._n_env.append(nd)
+            elif default_data:
+                self._n_env.append(_normalized_data(default_data.get('$result_file$')  or 'noname', 1, default_data))
+            elif range:
+                for range_key, range_value in ranges.items():
+                    self._n_env.append(_normalized_data(range_value.get('$result_file$') or 'noname',range_key, range_value))
+            else:
+                raise envException(
+                    f'Не указаны обязательные переменные $main$, $default$ или $range$')
         except KeyError as err:
             raise envException(
-                f'Не указаны обязательные переменные $main$, $result_file$, $range$:  {err}')
+                f'Не указаны обязательные переменные $main$, $default$ или $range$:  {err}')
 
     def get_data(self):
         """
@@ -35,17 +43,25 @@ class env:
         """
         return self._n_env
 
-
+def cast_normalized_data(self):
+    def __init__(result_file, range_key, data):
+        nd = _normalized_data()
+        nd.result_file=result_file
+        nd.add_normalize_data=data
+        nd.add_normalize_range=range_key
+        return nd
 class _normalized_data():
     """
     нормализованные данные готовые к передаче в genfile
     """
 
-    def __init__(self):
-        self.result_file = ''
+    def __init__(self, result_file, range_key, data):
+        self.result_file = result_file
         #dict in dict
         self.range_list = []
         self.data = {}
+        self.add_normalize_range(range_key)
+        self.add_normalize_data(data)
 
     def add_normalize_range(self, range_string: str):
         ranges = str(range_string).split(' ')
