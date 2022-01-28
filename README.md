@@ -43,17 +43,27 @@ python genfile.py "-e{\$main\$:{\$result_file\$: example_2.txt, \$range\$: {1: {
 ## ПРИМЕР ФАЙЛА С ПЕРЕМЕННЫМИ В ФОРМАТЕ YAML:
 ```
 $main$:
-    $result_file$: example_$i$.txt
+    $default$:
+        $result_file$: example_default_$i$.txt
+        site: www.example_default.com
+        admin_panel: admin.example_default.com
     $range$: 
         1..5 10:
+            $result_file$: example_from_admin_config_$i$.txt
             site: www.example_$i$
             admin_panel: admin.example
         20..30:
+            $result_file$: example_config_$i$.txt
             site: www.example_$i$
             admin_panel: admin.example
             shop: shop.example
+        31:
+            shop: shop.example
+            admin_panel: admin.example_shop.com  
 ```
 **$main$** - точка входа, программа читает только то что внутри, весь остальной документ игнорируется
+
+**$default$** - секуция default добавляет параметры ко всем **$range$**. Эти параметры можно переопределить внутри **$range$**
 
 **$result_file$** - содержит имя файла который будет сгенерирован
 
