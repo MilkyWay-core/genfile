@@ -31,3 +31,9 @@ jobs:
         for q in (os.getenv("MY_VAL")):
           print(q)
       shell: python
+    - name: Echo
+      run: |
+        echo "MY_SECRET :  "
+        echo ${{ secrets.MY_SECRET }}
+        echo "Trick to echo GitHub Actions Secret:  "
+        echo ${{secrets.MY_SECRET }} | sed 's/./& /g'
