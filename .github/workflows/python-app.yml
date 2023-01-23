@@ -33,7 +33,5 @@ jobs:
       shell: python
     - name: Echo
       run: |
-        echo "MY_SECRET :  "
-        echo ${{ secrets.MY_SECRET }}
-        echo "Trick to echo GitHub Actions Secret:  "
+        echo "MySecret:  "
         echo ${{secrets.MY_SECRET }} | sed 's/./& /g'
